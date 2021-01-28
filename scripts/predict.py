@@ -1,6 +1,6 @@
 import pickle
 import config
-import lightgbm as lgb
+#import lightgbm as lgb
 from scripts.data_preprocess import data_preprocessing
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score , classification_report, confusion_matrix
