@@ -1,4 +1,8 @@
-import datetime
+from datetime import datetime
+import os
+import pathlib
+
+path = os.path.abspath(os.getcwd())
 
 final_var = ['fist_order_today_diff', 'total_transac_bigger_5', 'fist_last_order_diff', 'amount_paid_sum',
              'month_first_order','total_diff_time', 'total_rest', 'total_transmission', 'total_plat',
@@ -17,10 +21,16 @@ col_name2 = ['last_order','failed_sum_m12','amount_paid_m12']
 today = datetime.strptime('2017-02-28', '%Y-%m-%d')
 
 
-model = 'artifacts/final_model.pkl'
+model = '/artifacts/final_model2.pkl'
 
 
-label_data = 'data/machine_learning_challenge_labeled_data.csv'
 
-predictors_data = 'data/machine_learning_challenge_order_data.csv'
+label_data =  '/data/machine_learning_challenge_labeled_data.csv'
 
+
+
+
+predictors_data =  '\data\machine_learning_challenge_order_data.csv'
+
+
+cat_var = ['total_transmission', 'month_last_order', 'total_city', 'total_pay', 'month_first_order', 'less_one_month_order', 'total_diff_time', 'total_plat', 'total_transac_bigger_5']

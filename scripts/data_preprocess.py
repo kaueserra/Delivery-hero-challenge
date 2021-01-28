@@ -5,7 +5,8 @@ import numpy as np
 from datetime import datetime
 import dateutil.relativedelta
 from sklearn.preprocessing import minmax_scale
-
+import pathlib
+import os
 
 class data_preprocessing():
 
@@ -16,11 +17,14 @@ class data_preprocessing():
         self.col_name1 = config.col_name1
         self.col_name2 = config.col_name2
         self.today = config.today
+        self.cat_var =config.cat_var
+        self.path = str(pathlib.Path().absolute())
 
     def prepare_data(self):
 
-        ds1 = pd.read_csv(self.label_data)
-        ds2 = pd.read_csv(self.predictors_data)
+
+        ds1 = pd.read_csv(self.path + self.label_data)
+        ds2 = pd.read_csv(self.path + self.predictors_data)
 
         self.ds = pd.merge(ds1, ds2, how='left', on='customer_id')
 
@@ -55,6 +59,8 @@ class data_preprocessing():
 
         ds_cust1.columns = self.col_name1
 
+        print( os.path.abspath(__file__))
+
         last_month_ds = self.ds[self.ds.order_date > (self.today - dateutil.relativedelta.relativedelta(months=12))]
 
         ds_cust2 = pd.DataFrame(last_month_ds.groupby('customer_id').agg({
@@ -77,9 +83,9 @@ class data_preprocessing():
 
         ds_agg_cust['fist_last_order_diff'] = (ds_agg_cust['last_order'] - ds_agg_cust['first_order']).dt.days
 
-        ds_agg_cust['fist_order_today_diff'] = (today - ds_agg_cust['first_order']).dt.days
+        ds_agg_cust['fist_order_today_diff'] = (self.today - ds_agg_cust['first_order']).dt.days
 
-        ds_agg_cust['last_order_today_diff'] = (today - ds_agg_cust['last_order']).dt.days
+        ds_agg_cust['last_order_today_diff'] = (self.today - ds_agg_cust['last_order']).dt.days
 
         ds_agg_cust['month_first_order'] = ds_agg_cust.first_order.dt.month
 
@@ -89,24 +95,20 @@ class data_preprocessing():
 
         ds_agg_cust['total_transac_bigger_5'] = np.where(ds_agg_cust['total_orders'] > 5, 1, 0)
 
+
         ds_all_raw = ds_agg_cust.copy()
 
         drop_var = list(ds_all_raw.select_dtypes(include=['datetime64']).columns)
 
         ds_all_raw = ds_all_raw.drop(drop_var, axis=1)
 
-        x = pd.DataFrame(ds_all_raw.nunique(), columns=['total'])
-        x = x[x.total < 30]
-        cat_var = list(x.index)
+        print(ds_all_raw.columns)
 
-        for i in cat_var:
-            ds_all_raw[i] = ds_all_raw[i].astype('category')
-
-        num_vars = list(set(list(self.final_var)) - set(cat_var))
+        num_vars = list(set(list(self.final_var)) - set(self.cat_var))
 
         final_ds1 = pd.DataFrame(minmax_scale(ds_all_raw[num_vars]), index=ds_all_raw.index, columns=num_vars)
 
-        cat_var_mod = list(set(self.final_vars) - set(num_vars))
+        cat_var_mod = list(set(self.final_var) - set(num_vars))
 
         final_ds2 = pd.get_dummies(ds_all_raw[cat_var_mod], drop_first=True)
 
