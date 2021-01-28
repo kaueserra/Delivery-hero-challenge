@@ -8,13 +8,20 @@ Create a new virtual enviroment
 open the comand line and pre install : 
 
 ! pip install requests
+
 ! pip install tabulate
+
 ! pip install "colorama >= 0.3.8"
+
 ! pip install future  
+
 ! pip uninstall h2o
+
 ! pip install -f http://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o
+
 ! pip install wheels 
-!pip install lightgbm 
+
+! pip install lightgbm 
 
 
 Then run: 
