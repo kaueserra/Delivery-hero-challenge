@@ -21,7 +21,7 @@ col_name2 = ['last_order','failed_sum_m12','amount_paid_m12']
 today = datetime.strptime('2017-02-28', '%Y-%m-%d')
 
 
-model = '/artifacts/final_model2.pkl'
+model = '/artifacts/final_model.pkl'
 
 
 
