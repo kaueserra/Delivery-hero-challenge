@@ -1,11 +1,11 @@
 # Reicarnation-Blues-Book
 
 
-For Python 3.7  
+# # For Python 3.7  
 
-Create a new virtual enviroment 
+## 1.Create a new virtual enviroment 
 
-open the comand line and pre install : 
+## 2.open the comand line and pre-install : 
 
 ! pip install requests
 
@@ -24,7 +24,7 @@ open the comand line and pre install :
 ! pip install lightgbm 
 
 
-Then run: 
+## 3. Then run: 
 
 pip install -r requirements.txt 
 
