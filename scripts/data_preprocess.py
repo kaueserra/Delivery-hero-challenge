@@ -59,8 +59,6 @@ class data_preprocessing():
 
         ds_cust1.columns = self.col_name1
 
-        print( os.path.abspath(__file__))
-
         last_month_ds = self.ds[self.ds.order_date > (self.today - dateutil.relativedelta.relativedelta(months=12))]
 
         ds_cust2 = pd.DataFrame(last_month_ds.groupby('customer_id').agg({
@@ -91,6 +89,8 @@ class data_preprocessing():
 
         ds_agg_cust['month_last_order'] = ds_agg_cust.last_order.dt.month
 
+        ds_agg_cust['month_last_order'] = (ds_agg_cust.last_order.dt.month).astype('Int64')
+
         ds_agg_cust['less_one_month_order'] = np.where(ds_agg_cust['last_order_today_diff'] < 31, 1, 0)
 
         ds_agg_cust['total_transac_bigger_5'] = np.where(ds_agg_cust['total_orders'] > 5, 1, 0)
@@ -102,16 +102,14 @@ class data_preprocessing():
 
         ds_all_raw = ds_all_raw.drop(drop_var, axis=1)
 
-        print(ds_all_raw.columns)
-
         num_vars = list(set(list(self.final_var)) - set(self.cat_var))
 
         final_ds1 = pd.DataFrame(minmax_scale(ds_all_raw[num_vars]), index=ds_all_raw.index, columns=num_vars)
 
-        cat_var_mod = list(set(self.final_var) - set(num_vars))
+        ds_all_raw[self.cat_var] = ds_all_raw[self.cat_var].apply(lambda x: x.astype('category'))
 
-        final_ds2 = pd.get_dummies(ds_all_raw[cat_var_mod], drop_first=True)
+        final_ds2 = pd.get_dummies(ds_all_raw[self.cat_var], drop_first=True)
 
-        final_ds = pd.merge(final_ds1, final_ds2, how='left', left_index=True, right_index=True)
+        final_ds = pd.merge(final_ds1, final_ds2, how='left', left_index=True, right_index=True) 
 
         return final_ds

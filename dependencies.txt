@@ -1,0 +1,7 @@
+requests
+tabulate
+colorama >= 0.3.8
+future
+wheel
+
+
