@@ -1,7 +1,7 @@
 import pickle
 import config
-import lightgbm as lgb
-from scripts.data_preprocess import data_preprocessing
+#import lightgbm as lgb
+from scripts import data_preprocessing
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score , classification_report, confusion_matrix
 import pandas as pd
@@ -37,6 +37,8 @@ class predict():
             pickle_model = pickle.load(file)
 
         # Calculate the accuracy score and predict target values
+
+        x_test =x_test.fillna(0)
 
         final_ds['pred'] = pickle_model.predict(x_test)
 
