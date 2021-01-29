@@ -30,6 +30,8 @@ class predict():
         y_test = final_ds['is_returning_customer']
 
         x_test = final_ds[self.final_var_transf]
+
+        # opening the model via pickle file
         
         with open(self.path +  self.model, 'rb') as file:
             pickle_model = pickle.load(file)

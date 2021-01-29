@@ -22,7 +22,7 @@ class data_preprocessing():
 
     def prepare_data(self):
 
-
+        # get the data
         ds1 = pd.read_csv(self.path + self.label_data)
         ds2 = pd.read_csv(self.path + self.predictors_data)
 
@@ -40,6 +40,7 @@ class data_preprocessing():
 
         self.ds = self.ds.sort_values(by=['order_date', 'customer_id'], ascending=False)
 
+        # Only the selected aggregations
 
         ds_cust1 = pd.DataFrame(self.ds.groupby('customer_id').agg({
             'customer_id': 'count',
@@ -75,6 +76,8 @@ class data_preprocessing():
 
         ds_cust3.columns = ['voucher_amount_sum_m6']
 
+        # Merging and creating more features
+
         ds_agg_cust = pd.merge(ds_cust1, ds_cust2, how='left', left_index=True, right_index=True)
 
         ds_agg_cust = pd.merge(ds_agg_cust, ds_cust3, how='left', left_index=True, right_index=True)
@@ -95,16 +98,21 @@ class data_preprocessing():
 
         ds_agg_cust['total_transac_bigger_5'] = np.where(ds_agg_cust['total_orders'] > 5, 1, 0)
 
-
         ds_all_raw = ds_agg_cust.copy()
+
+        # Dropping date variables
 
         drop_var = list(ds_all_raw.select_dtypes(include=['datetime64']).columns)
 
         ds_all_raw = ds_all_raw.drop(drop_var, axis=1)
 
+        # Using min-max scale on the numeric
+
         num_vars = list(set(list(self.final_var)) - set(self.cat_var))
 
         final_ds1 = pd.DataFrame(minmax_scale(ds_all_raw[num_vars]), index=ds_all_raw.index, columns=num_vars)
+
+        # creating variable dummies for the categorical
 
         ds_all_raw[self.cat_var] = ds_all_raw[self.cat_var].apply(lambda x: x.astype('category'))
 
