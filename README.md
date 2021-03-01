@@ -1,4 +1,4 @@
-# Reicarnation-Blues-Book
+# Take home-task
 
 
 # # For Python 3.7  
@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 from the diretory just run 
 
-python Reicarnation-Blues-Book 
+python Delivery-hero-challenge 
 
 ** PS: I know it may not run, my computer was so old that I cannot install docker to create a shell 
 
